@@ -1,0 +1,46 @@
+2025-03-10 19:53:38.955 +01:00 [INF] User profile is available. Using 'C:\Users\MatijaSabljic\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-10 19:53:39.463 +01:00 [INF] Now listening on: https://localhost:7147
+2025-03-10 19:53:39.464 +01:00 [INF] Now listening on: http://localhost:5182
+2025-03-10 19:53:39.514 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-10 19:53:39.516 +01:00 [INF] Hosting environment: Development
+2025-03-10 19:53:39.517 +01:00 [INF] Content root path: C:\Users\MatijaSabljic\source\repos\image-resizer-api\src\ImageResizer.Api
+2025-03-10 19:54:46.555 +01:00 [INF] User profile is available. Using 'C:\Users\MatijaSabljic\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-10 19:54:46.815 +01:00 [INF] Now listening on: https://localhost:7147
+2025-03-10 19:54:46.817 +01:00 [INF] Now listening on: http://localhost:5182
+2025-03-10 19:54:46.858 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-10 19:54:46.863 +01:00 [INF] Hosting environment: Development
+2025-03-10 19:54:46.864 +01:00 [INF] Content root path: C:\Users\MatijaSabljic\source\repos\image-resizer-api\src\ImageResizer.Api
+2025-03-10 19:55:07.151 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7147/ - null null
+2025-03-10 19:55:07.533 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7147/ - 404 0 null 390.6164ms
+2025-03-10 19:55:07.573 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7147/, Response status code: 404
+2025-03-10 19:55:11.283 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7147/scalar - null null
+2025-03-10 19:55:11.375 +01:00 [INF] Executing endpoint 'HTTP: GET /scalar/{documentName?}'
+2025-03-10 19:55:11.405 +01:00 [INF] Executing RedirectResult, redirecting to scalar/.
+2025-03-10 19:55:11.417 +01:00 [INF] Executed endpoint 'HTTP: GET /scalar/{documentName?}'
+2025-03-10 19:55:11.421 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7147/scalar - 302 0 null 137.8804ms
+2025-03-10 19:55:11.428 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7147/scalar/ - null null
+2025-03-10 19:55:11.445 +01:00 [INF] Executing endpoint 'HTTP: GET /scalar/{documentName?}'
+2025-03-10 19:55:11.542 +01:00 [INF] Write content with HTTP Response ContentType of text/html
+2025-03-10 19:55:11.556 +01:00 [INF] Executed endpoint 'HTTP: GET /scalar/{documentName?}'
+2025-03-10 19:55:11.560 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7147/scalar/ - 200 null text/html 131.4277ms
+2025-03-10 19:55:11.584 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7147/scalar/scalar.aspnetcore.js - null null
+2025-03-10 19:55:11.584 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7147/scalar/scalar.js - null null
+2025-03-10 19:55:11.584 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7147/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-10 19:55:11.584 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7147/_vs/browserLink - null null
+2025-03-10 19:55:11.589 +01:00 [INF] Executing endpoint 'HTTP: GET /scalar/scalar.aspnetcore.js'
+2025-03-10 19:55:11.592 +01:00 [INF] Executing endpoint 'HTTP: GET /scalar/scalar.js'
+2025-03-10 19:55:11.624 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7147/_framework/aspnetcore-browser-refresh.js - 200 13784 application/javascript; charset=utf-8 39.7598ms
+2025-03-10 19:55:11.628 +01:00 [INF] Sending file with download name ''.
+2025-03-10 19:55:11.628 +01:00 [INF] Sending file with download name ''.
+2025-03-10 19:55:11.649 +01:00 [INF] Executed endpoint 'HTTP: GET /scalar/scalar.aspnetcore.js'
+2025-03-10 19:55:11.674 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7147/_vs/browserLink - 200 null text/javascript; charset=UTF-8 89.7123ms
+2025-03-10 19:55:11.704 +01:00 [INF] Executed endpoint 'HTTP: GET /scalar/scalar.js'
+2025-03-10 19:55:11.714 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7147/scalar/scalar.aspnetcore.js - 200 390 text/javascript 129.7025ms
+2025-03-10 19:55:11.720 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7147/scalar/scalar.js - 200 2788519 text/javascript 135.9997ms
+2025-03-10 19:55:11.965 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7147/openapi/v1.json - null null
+2025-03-10 19:55:11.969 +01:00 [INF] Executing endpoint 'HTTP: GET /openapi/{documentName}.json'
+2025-03-10 19:55:12.128 +01:00 [INF] Executed endpoint 'HTTP: GET /openapi/{documentName}.json'
+2025-03-10 19:55:12.131 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7147/openapi/v1.json - 200 null application/json;charset=utf-8 166.4308ms
+2025-03-10 19:55:12.534 +01:00 [INF] Request starting HTTP/2 GET https://localhost:7147/favicon.ico - null null
+2025-03-10 19:55:12.538 +01:00 [INF] Request finished HTTP/2 GET https://localhost:7147/favicon.ico - 404 0 null 3.2275ms
+2025-03-10 19:55:12.540 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7147/favicon.ico, Response status code: 404

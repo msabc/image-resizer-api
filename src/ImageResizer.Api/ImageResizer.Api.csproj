@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>e039f11d-503c-4b0b-b455-3e2b6571c138</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.0.27" />
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Crosscutting\ImageResizer.IoC\ImageResizer.IoC.csproj" />
+    <ProjectReference Include="..\ImageResizer.Application\ImageResizer.Application.csproj" />
+    <ProjectReference Include="..\ImageResizer.Infrastructure\ImageResizer.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

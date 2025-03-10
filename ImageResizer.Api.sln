@@ -1,0 +1,71 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{42EF804C-43F2-4C92-B7A8-A968EB0BA52E}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5DA9B12E-DB6C-48C4-826C-B49692EC4207}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Crosscutting", "Crosscutting", "{630EA533-F7E0-47D1-89A0-B90FE2115925}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageResizer.Configuration", "src\Crosscutting\ImageResizer.Configuration\ImageResizer.Configuration.csproj", "{1E66CCD0-D8B9-4537-8C56-E9201028030D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageResizer.IoC", "src\Crosscutting\ImageResizer.IoC\ImageResizer.IoC.csproj", "{4936CE18-A167-4A99-A148-39F70A9726B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageResizer.Api", "src\ImageResizer.Api\ImageResizer.Api.csproj", "{FCEDED63-BACD-459A-9C6E-52A8AA86F6B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageResizer.Application", "src\ImageResizer.Application\ImageResizer.Application.csproj", "{C6ED5C02-93A9-481C-8DAA-8881EA554022}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageResizer.Domain", "src\ImageResizer.Domain\ImageResizer.Domain.csproj", "{28E2932F-D968-476D-8FF9-557A47DE5C63}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageResizer.Infrastructure", "src\ImageResizer.Infrastructure\ImageResizer.Infrastructure.csproj", "{64EFD3B8-A345-4C77-AFE8-FAF6E8F74B74}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1E66CCD0-D8B9-4537-8C56-E9201028030D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E66CCD0-D8B9-4537-8C56-E9201028030D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E66CCD0-D8B9-4537-8C56-E9201028030D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E66CCD0-D8B9-4537-8C56-E9201028030D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4936CE18-A167-4A99-A148-39F70A9726B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4936CE18-A167-4A99-A148-39F70A9726B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4936CE18-A167-4A99-A148-39F70A9726B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4936CE18-A167-4A99-A148-39F70A9726B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCEDED63-BACD-459A-9C6E-52A8AA86F6B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCEDED63-BACD-459A-9C6E-52A8AA86F6B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCEDED63-BACD-459A-9C6E-52A8AA86F6B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCEDED63-BACD-459A-9C6E-52A8AA86F6B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6ED5C02-93A9-481C-8DAA-8881EA554022}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6ED5C02-93A9-481C-8DAA-8881EA554022}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6ED5C02-93A9-481C-8DAA-8881EA554022}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6ED5C02-93A9-481C-8DAA-8881EA554022}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28E2932F-D968-476D-8FF9-557A47DE5C63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28E2932F-D968-476D-8FF9-557A47DE5C63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28E2932F-D968-476D-8FF9-557A47DE5C63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28E2932F-D968-476D-8FF9-557A47DE5C63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64EFD3B8-A345-4C77-AFE8-FAF6E8F74B74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64EFD3B8-A345-4C77-AFE8-FAF6E8F74B74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64EFD3B8-A345-4C77-AFE8-FAF6E8F74B74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64EFD3B8-A345-4C77-AFE8-FAF6E8F74B74}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{630EA533-F7E0-47D1-89A0-B90FE2115925} = {5DA9B12E-DB6C-48C4-826C-B49692EC4207}
+		{1E66CCD0-D8B9-4537-8C56-E9201028030D} = {630EA533-F7E0-47D1-89A0-B90FE2115925}
+		{4936CE18-A167-4A99-A148-39F70A9726B4} = {630EA533-F7E0-47D1-89A0-B90FE2115925}
+		{FCEDED63-BACD-459A-9C6E-52A8AA86F6B7} = {5DA9B12E-DB6C-48C4-826C-B49692EC4207}
+		{C6ED5C02-93A9-481C-8DAA-8881EA554022} = {5DA9B12E-DB6C-48C4-826C-B49692EC4207}
+		{28E2932F-D968-476D-8FF9-557A47DE5C63} = {5DA9B12E-DB6C-48C4-826C-B49692EC4207}
+		{64EFD3B8-A345-4C77-AFE8-FAF6E8F74B74} = {5DA9B12E-DB6C-48C4-826C-B49692EC4207}
+	EndGlobalSection
+EndGlobal
