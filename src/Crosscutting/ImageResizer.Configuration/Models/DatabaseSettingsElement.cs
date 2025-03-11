@@ -2,6 +2,6 @@
 {
     public record DatabaseSettingsElement
     {
-        public required string ResizerConnectionString { get; set; }
+        public required string ConnectionString { get; set; }
     }
 }

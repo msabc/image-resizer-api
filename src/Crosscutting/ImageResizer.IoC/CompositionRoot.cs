@@ -39,12 +39,12 @@ namespace ImageResizer.IoC
 
         private static IServiceCollection RegisterDatabaseConfiguration(this IServiceCollection services, ResizerSettings settings)
         {
-            if (string.IsNullOrEmpty(settings.DatabaseSettings.ResizerConnectionString))
+            if (string.IsNullOrEmpty(settings.DatabaseSettings.ConnectionString))
                 throw new ArgumentNullException(nameof(settings));
 
             services.AddDbContext<ResizerDbContext>(options =>
             {
-                options.UseSqlServer(settings.DatabaseSettings.ResizerConnectionString);
+                options.UseSqlServer(settings.DatabaseSettings.ConnectionString);
             });
 
             return services;
