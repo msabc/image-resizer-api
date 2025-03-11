@@ -11,5 +11,7 @@ namespace ImageResizer.Configuration
         public BlobSettingsElement BlobSettings { get; set; }
 
         public DatabaseSettingsElement DatabaseSettings { get; set; }
+
+        public ImageSettingsElement ImageSettings { get; set; }
     }
 }

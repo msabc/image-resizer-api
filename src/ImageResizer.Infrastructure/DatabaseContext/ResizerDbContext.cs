@@ -11,7 +11,7 @@ namespace ImageResizer.Infrastructure.DatabaseContext
     {
         public override DbSet<ApplicationUser> Users { get; set; }
 
-        public DbSet<Image> Images { get; set; }
+        public DbSet<FileUpload> FileUploads { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

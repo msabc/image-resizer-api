@@ -25,6 +25,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageResizer.Domain", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageResizer.Infrastructure", "src\ImageResizer.Infrastructure\ImageResizer.Infrastructure.csproj", "{64EFD3B8-A345-4C77-AFE8-FAF6E8F74B74}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{0720573D-BEF5-4ADE-B12F-5DBED0182621}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageResizer.Tests.Unit", "test\ImageResizer.Tests.Unit\ImageResizer.Tests.Unit.csproj", "{7F0F55AA-2DC1-450E-9D8A-AE707D4CA8D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +59,10 @@ Global
 		{64EFD3B8-A345-4C77-AFE8-FAF6E8F74B74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64EFD3B8-A345-4C77-AFE8-FAF6E8F74B74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64EFD3B8-A345-4C77-AFE8-FAF6E8F74B74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F0F55AA-2DC1-450E-9D8A-AE707D4CA8D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F0F55AA-2DC1-450E-9D8A-AE707D4CA8D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F0F55AA-2DC1-450E-9D8A-AE707D4CA8D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F0F55AA-2DC1-450E-9D8A-AE707D4CA8D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,5 +75,6 @@ Global
 		{C6ED5C02-93A9-481C-8DAA-8881EA554022} = {5DA9B12E-DB6C-48C4-826C-B49692EC4207}
 		{28E2932F-D968-476D-8FF9-557A47DE5C63} = {5DA9B12E-DB6C-48C4-826C-B49692EC4207}
 		{64EFD3B8-A345-4C77-AFE8-FAF6E8F74B74} = {5DA9B12E-DB6C-48C4-826C-B49692EC4207}
+		{7F0F55AA-2DC1-450E-9D8A-AE707D4CA8D4} = {0720573D-BEF5-4ADE-B12F-5DBED0182621}
 	EndGlobalSection
 EndGlobal

@@ -2,8 +2,8 @@
 
 namespace ImageResizer.Domain.Interfaces.Repositories
 {
-    public interface IImageRepository
+    public interface IFileUploadRepository
     {
-        Task AddAsync(AddImageCommand command);
+        Task AddAsync(AddFileUploadCommand command);
     }
 }

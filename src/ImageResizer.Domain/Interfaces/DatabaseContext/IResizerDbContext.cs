@@ -7,7 +7,7 @@ namespace ImageResizer.Domain.Interfaces.DatabaseContext
     {
         DbSet<ApplicationUser> Users { get; set; }
 
-        DbSet<Image> Images { get; set; }
+        DbSet<FileUpload> FileUploads { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken());
     }

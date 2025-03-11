@@ -59,7 +59,7 @@ namespace ImageResizer.IoC
 
         private static IServiceCollection RegisterRepositories(this IServiceCollection services)
         {
-            services.AddScoped<IImageRepository, ImageRepository>();
+            services.AddScoped<IFileUploadRepository, FileUploadRepository>();
 
             return services;
         }
@@ -72,7 +72,7 @@ namespace ImageResizer.IoC
             services.AddScoped<IImageService, ImageService>();
 
             // validation
-            services.AddScoped<IValidationService, ValidationService>();
+            services.AddScoped<IFileValidationService, FileValidationService>();
 
             return services;
         }
