@@ -33,14 +33,6 @@ try
     builder.Services.AddOpenApi(options =>
     {
         options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
-        //options.AddSchemaTransformer = (document, serviceProvider) =>
-        //{
-        //    document.GenerateCustomSchema<IFormFile>(() => new NSwag.OpenApiSchema
-        //    {
-        //        Type = "string",
-        //        Format = "binary" // Define file input schema for `IFormFile`
-        //    });
-        //};
     });
 
     var resizerSettings = builder.Services.RegisterApplicationDependencies(builder.Configuration);
