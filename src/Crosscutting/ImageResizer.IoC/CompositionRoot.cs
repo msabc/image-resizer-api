@@ -5,8 +5,10 @@ using ImageResizer.Application.Services.Validation;
 using ImageResizer.Configuration;
 using ImageResizer.Domain.Interfaces.DatabaseContext;
 using ImageResizer.Domain.Interfaces.Repositories;
+using ImageResizer.Domain.Interfaces.Services;
 using ImageResizer.Infrastructure.DatabaseContext;
 using ImageResizer.Infrastructure.Repositories;
+using ImageResizer.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +24,8 @@ namespace ImageResizer.IoC
             services.RegisterDatabaseConfiguration(settings)
                     .RegisterDbContext()
                     .RegisterRepositories()
-                    .RegisterApplicationServices();
+                    .RegisterApplicationServices()
+                    .RegisterInfrastructureServices();
 
             return settings;
         }
@@ -73,6 +76,13 @@ namespace ImageResizer.IoC
 
             // validation
             services.AddScoped<IFileValidationService, FileValidationService>();
+
+            return services;
+        }
+
+        private static IServiceCollection RegisterInfrastructureServices(this IServiceCollection services)
+        {
+            services.AddScoped<IBlobService, BlobService>();
 
             return services;
         }

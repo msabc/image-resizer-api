@@ -1,4 +1,6 @@
 using ImageResizer.Api.Controllers.Base;
+using ImageResizer.Application.Models.Request.Image;
+using ImageResizer.Application.Models.Response.Image;
 using ImageResizer.Application.Services.Image;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,13 +11,12 @@ namespace ImageResizer.Api.Controllers
     [Route("[controller]")]
     public class ImageController(IImageService imageService) : ImageResizerBaseController
     {
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<IActionResult> AddImageAsync([FromForm] IFormFile file)
+        [HttpPost("upload")]
+        [Consumes("multipart/form-data")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UploadImageResponse))]
+        public async Task<IActionResult> UploadAsync([FromForm] UploadFileRequest request)
         {
-            await imageService.UploadAsync(file);
-
-            return NoContent();
+            return Ok(await imageService.UploadAsync(CurrentUserService.UserId, request.File));
         }
     }
 }

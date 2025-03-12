@@ -27,7 +27,7 @@ namespace ImageResizer.Infrastructure.Services
             _blobContainerClient.CreateIfNotExists(PublicAccessType.Blob);
         }
 
-        public async Task<string> UploadFileAsync(Stream fileStream, string fileName)
+        public async Task<string> UploadAsync(Stream fileStream, string fileName)
         {
             var blobClient = _blobContainerClient.GetBlobClient(fileName);
 
@@ -36,7 +36,7 @@ namespace ImageResizer.Infrastructure.Services
             return blobClient.Uri.ToString();
         }
 
-        public async Task<Stream> DownloadFileAsync(string fileName)
+        public async Task<Stream> DownloadAsync(string fileName)
         {
             var blobClient = _blobContainerClient.GetBlobClient(fileName);
 
@@ -45,7 +45,7 @@ namespace ImageResizer.Infrastructure.Services
             return download.Value.Content;
         }
 
-        public async Task DeleteFileAsync(string fileName)
+        public async Task DeleteAsync(string fileName)
         {
             var blobClient = _blobContainerClient.GetBlobClient(fileName);
 

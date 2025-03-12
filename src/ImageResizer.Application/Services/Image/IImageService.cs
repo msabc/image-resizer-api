@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ImageResizer.Application.Models.Response.Image;
+using Microsoft.AspNetCore.Http;
 
 namespace ImageResizer.Application.Services.Image
 {
     public interface IImageService
     {
-        public Task UploadAsync(IFormFile file);
+        public Task<UploadImageResponse> UploadAsync(Guid userId, IFormFile file);
     }
 }

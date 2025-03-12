@@ -11,7 +11,7 @@ namespace ImageResizer.Infrastructure.Repositories
         {
             FileUpload fileUpload = new()
             {
-                Url = command.Url,
+                Uri = command.Uri,
                 Name = command.Name,
                 CreatedDate = command.CreatedDate,
                 CreatedByUserId = command.CreatedByUserId
@@ -20,6 +20,23 @@ namespace ImageResizer.Infrastructure.Repositories
             await resizerDbContext.FileUploads.AddAsync(fileUpload);
 
             await resizerDbContext.SaveChangesAsync();
+        }
+
+        public async Task ExecuteInTransactionAsync(Func<Task> action)
+        {
+            using var transaction = await resizerDbContext.Database.BeginTransactionAsync();
+
+            try
+            {
+                await action();
+
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
     }
 }

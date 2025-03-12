@@ -1,5 +1,6 @@
 ﻿using ImageResizer.Domain.Models.Tables;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace ImageResizer.Domain.Interfaces.DatabaseContext
 {
@@ -8,6 +9,8 @@ namespace ImageResizer.Domain.Interfaces.DatabaseContext
         DbSet<ApplicationUser> Users { get; set; }
 
         DbSet<FileUpload> FileUploads { get; set; }
+
+        DatabaseFacade Database { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken());
     }

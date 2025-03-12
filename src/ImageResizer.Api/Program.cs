@@ -1,6 +1,8 @@
 using System.Text;
 using ImageResizer.Api.Filters;
 using ImageResizer.Api.OpenAPI;
+using ImageResizer.Api.Services;
+using ImageResizer.Domain.Interfaces.Services;
 using ImageResizer.Domain.Models.Tables;
 using ImageResizer.Infrastructure.DatabaseContext;
 using ImageResizer.IoC;
@@ -31,9 +33,20 @@ try
     builder.Services.AddOpenApi(options =>
     {
         options.AddDocumentTransformer<BearerSecuritySchemeTransformer>();
+        //options.AddSchemaTransformer = (document, serviceProvider) =>
+        //{
+        //    document.GenerateCustomSchema<IFormFile>(() => new NSwag.OpenApiSchema
+        //    {
+        //        Type = "string",
+        //        Format = "binary" // Define file input schema for `IFormFile`
+        //    });
+        //};
     });
 
     var resizerSettings = builder.Services.RegisterApplicationDependencies(builder.Configuration);
+
+    builder.Services.AddHttpContextAccessor();
+    builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
     // Add Authorization
     builder.Services.AddAuthorization();
@@ -91,6 +104,12 @@ try
     });
 
     var app = builder.Build();
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<ResizerDbContext>();
+        dbContext.Database.EnsureCreated();
+    }
 
     app.UseSerilogRequestLogging();
 

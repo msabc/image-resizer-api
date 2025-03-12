@@ -10,7 +10,6 @@ namespace ImageResizer.Application.Services.User
         UserManager<ApplicationUser> userManager,
         IAccessTokenService accessTokenService) : IUserService
     {
-
         public async Task<string> SignUpAsync(SignUpRequest request)
         {
             var user = new ApplicationUser

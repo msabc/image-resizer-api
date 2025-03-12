@@ -2,10 +2,10 @@
 {
     public interface IBlobService
     {
-        public Task<string> UploadFileAsync(Stream fileStream, string fileName);
+        public Task<string> UploadAsync(Stream fileStream, string fileName);
 
-        public Task<Stream> DownloadFileAsync(string fileName);
+        public Task<Stream> DownloadAsync(string fileName);
 
-        public Task DeleteFileAsync(string fileName);
+        public Task DeleteAsync(string fileName);
     }
 }

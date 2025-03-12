@@ -2,6 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using ImageResizer.Application.Constants.Auth;
 using ImageResizer.Configuration;
 using ImageResizer.Configuration.Models;
 using ImageResizer.Domain.Models.Tables;
@@ -19,9 +20,12 @@ namespace ImageResizer.Application.Services.AccessToken
 
         public async Task<string> CreateAccessTokenAsync(ApplicationUser user)
         {
+            // Using custom claims here because ASP.NET Identity maps the 'sub' claim to http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier and
+            // 'email' claim to http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress.
             List<Claim> claims =
             [
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email!),
+                new Claim(JwtCustomClaimNames.Sub, user.Id.ToString()),
+                new Claim(JwtCustomClaimNames.Email, user.Email!),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, EpochTime.GetIntDate(DateTime.UtcNow).ToString(CultureInfo.InvariantCulture), ClaimValueTypes.Integer64),
                 new Claim(JwtRegisteredClaimNames.Iss, _jwtSettings.Issuer),
