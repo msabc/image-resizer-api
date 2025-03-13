@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using ImageResizer.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Solarnelle.Domain.Exceptions;

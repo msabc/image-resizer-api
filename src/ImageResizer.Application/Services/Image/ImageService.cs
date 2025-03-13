@@ -3,11 +3,11 @@ using ImageResizer.Application.Models.Request.Image;
 using ImageResizer.Application.Models.Response.Image;
 using ImageResizer.Application.Services.Validation;
 using ImageResizer.Domain.Commands.File;
+using ImageResizer.Domain.Exceptions;
 using ImageResizer.Domain.Interfaces.Repositories;
 using ImageResizer.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Solarnelle.Domain.Exceptions;
 
 namespace ImageResizer.Application.Services.Image
 {

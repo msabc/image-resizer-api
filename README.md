@@ -44,7 +44,23 @@ The project features the following technologies:
 1. Clone the project
 2. Open the solution (**ImageResizer.Api.sln**) in Visual Studio
 3. Set **ImageResizer.Api** as the Startup project
-4. Configure necessary settings: 
-    - ImageResizer will create a database if one doesn't exist based on the **ConnectionString** setting.
-    - ImageResizer requires a 128 bit key for JWT signature validation based on the **IssuerSigningKey** setting.
-6. Run the project
+4. Configure **user secrets** necessary for local development: 
+    - Right-click on the **ImageResizer.Api** project and click 'Manage User Secrets'
+    - a secrets.json file will be created
+    - populate the file with the following values:
+ ```javascript
+{
+  "ResizerSettings": {
+    "JWTSettings": {
+      "Issuer": "https://[YOUR_ISSUER]",
+      "Audience": "https://[YOUR_AUDIENCE]",
+      "IssuerSigningKey": "[YOUR_128_BIT_KEY]"
+    }
+  }
+}
+```
+
+Replace the values in brackets with your own values. 
+You can generate a random 128 bit key [**here**](https://generate-random.org/encryption-key-generator?count=1&bytes=16&cipher=aes-256-cbc).
+
+5. Run the project

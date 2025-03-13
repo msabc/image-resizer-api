@@ -11,7 +11,7 @@ namespace ImageResizer.Domain.Interfaces.Repositories
 
         Task<FileUpload?> GetByIdAsync(Guid id);
 
-        Task<FileUpload?> DeleteAsync(Guid id);
+        Task DeleteAsync(Guid id);
 
         Task ExecuteInTransactionAsync(Func<Task> action);
     }

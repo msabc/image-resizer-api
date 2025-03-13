@@ -1,11 +1,11 @@
 ﻿using System.Text;
 using ImageResizer.Application.Services.Validation;
 using ImageResizer.Configuration;
+using ImageResizer.Domain.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using Solarnelle.Domain.Exceptions;
 
 namespace ImageResizer.Tests.Unit.Application.Services
 {

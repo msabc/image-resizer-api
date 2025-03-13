@@ -1,8 +1,8 @@
 ﻿using ImageResizer.Configuration;
+using ImageResizer.Domain.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Solarnelle.Domain.Exceptions;
 
 namespace ImageResizer.Application.Services.Validation
 {

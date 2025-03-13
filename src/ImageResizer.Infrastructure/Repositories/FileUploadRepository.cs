@@ -47,6 +47,18 @@ namespace ImageResizer.Infrastructure.Repositories
             return await resizerDbContext.FileUploads.SingleOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task DeleteAsync(Guid id)
+        {
+            var fileForDeletion = await resizerDbContext.FileUploads.SingleOrDefaultAsync(x => x.Id == id);
+
+            if (fileForDeletion != null)
+            {
+                resizerDbContext.FileUploads.Remove(fileForDeletion);
+
+                await resizerDbContext.SaveChangesAsync();
+            }
+        }
+
         public async Task ExecuteInTransactionAsync(Func<Task> action)
         {
             using var transaction = await resizerDbContext.Database.BeginTransactionAsync();

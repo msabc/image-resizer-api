@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Solarnelle.Domain.Exceptions
+namespace ImageResizer.Domain.Exceptions
 {
     public class CustomHttpException : Exception
     {
