@@ -69,5 +69,28 @@ namespace ImageResizer.Application.Services.Image
 
             return fileUpload.MapToResponse();
         }
+
+        public async Task DeleteAsync(Guid userId, Guid id)
+        {
+            var file = await fileUploadRepository.GetByIdAsync(id);
+
+            if (file == null)
+                throw new CustomHttpException($"Unable to find an image with id {id}", System.Net.HttpStatusCode.NotFound);
+
+            try
+            {
+                await fileUploadRepository.ExecuteInTransactionAsync(async () =>
+                {
+                    await fileUploadRepository.DeleteAsync(file.Id);
+
+                    await blobService.DeleteAsync(file.Name);
+                });
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"An unexpected error occurred during image upload. {ex.Message}");
+                throw;
+            }
+        }
     }
 }

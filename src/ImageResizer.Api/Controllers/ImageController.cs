@@ -20,6 +20,7 @@ namespace ImageResizer.Api.Controllers
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetByIdResponse))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetByIdAsync(Guid id)
         {
             return Ok(await imageService.GetByIdAsync(CurrentUserService.UserId, id));
@@ -31,6 +32,15 @@ namespace ImageResizer.Api.Controllers
         public async Task<IActionResult> UploadAsync([FromForm] UploadFileRequest request)
         {
             return Ok(await imageService.UploadAsync(CurrentUserService.UserId, request.File));
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UploadImageResponse))]
+        public async Task<IActionResult> DeleteAsync(Guid id)
+        {
+            await imageService.DeleteAsync(CurrentUserService.UserId, id);
+
+            return Ok();
         }
     }
 }
