@@ -33,81 +33,81 @@ namespace ImageResizer.Tests.Unit.Application.Services
         }
 
         [Fact]
-        public void ValidateImage_ParameterIsNull_ExceptionIsThrown()
+        public async Task ValidateImageAsync_ParameterIsNull_ExceptionIsThrown()
         {
-            var ex = Record.Exception(() => _fileValidationService.ValidateImage(null!));
+            var ex = await Record.ExceptionAsync(async () => await _fileValidationService.ValidateImageAsync(null!));
 
             Assert.NotNull(ex);
         }
 
         [Fact]
-        public void ValidateImage_FileNameIsNull_ArgumentNullExceptionIsThrown()
+        public async Task ValidateImageAsync_FileNameIsNull_ArgumentNullExceptionIsThrown()
         {
             _formFileMock.Setup(f => f.FileName).Returns((string)null!);
 
-            var ex = Record.Exception(() => _fileValidationService.ValidateImage(_formFileMock.Object));
+            var ex = await Record.ExceptionAsync(async () => await _fileValidationService.ValidateImageAsync(_formFileMock.Object));
 
             Assert.NotNull(ex);
             Assert.IsType<ArgumentNullException>(ex);
         }
 
         [Fact]
-        public void ValidateImage_ContentTypeIsNull_ArgumentNullExceptionIsThrown()
+        public async Task ValidateImageAsync_ContentTypeIsNull_ArgumentNullExceptionIsThrown()
         {
             _formFileMock.Setup(f => f.ContentType).Returns((string)null!);
 
-            var ex = Record.Exception(() => _fileValidationService.ValidateImage(_formFileMock.Object));
+            var ex = await Record.ExceptionAsync(() => _fileValidationService.ValidateImageAsync(_formFileMock.Object));
 
             Assert.NotNull(ex);
             Assert.IsType<CustomHttpException>(ex);
         }
 
         [Fact]
-        public void ValidateImage_ContentTypeIsUnsupported_CustomHttpExceptionIsThrown()
+        public async Task ValidateImageAsync_ContentTypeIsUnsupported_CustomHttpExceptionIsThrown()
         {
             _formFileMock.Setup(f => f.ContentType).Returns("text/plain");
 
-            var ex = Record.Exception(() => _fileValidationService.ValidateImage(_formFileMock.Object));
+            var ex = await Record.ExceptionAsync(() => _fileValidationService.ValidateImageAsync(_formFileMock.Object));
 
             Assert.NotNull(ex);
             Assert.IsType<CustomHttpException>(ex);
         }
 
         [Fact]
-        public void ValidateImage_ExtensionIsUnsupported_CustomHttpExceptionIsThrown()
+        public async Task ValidateImageAsync_ExtensionIsUnsupported_CustomHttpExceptionIsThrown()
         {
             _formFileMock.Setup(f => f.FileName).Returns("something.mp3");
 
-            var ex = Record.Exception(() => _fileValidationService.ValidateImage(_formFileMock.Object));
+            var ex = await Record.ExceptionAsync(() => _fileValidationService.ValidateImageAsync(_formFileMock.Object));
 
             Assert.NotNull(ex);
             Assert.IsType<CustomHttpException>(ex);
         }
 
         [Fact]
-        public void ValidateImage_FileSizeIsZero_CustomHttpExceptionIsThrown()
+        public async Task ValidateImageAsync_FileSizeIsZero_CustomHttpExceptionIsThrown()
         {
             _formFileMock.Setup(f => f.Length).Returns(0);
 
-            var ex = Record.Exception(() => _fileValidationService.ValidateImage(_formFileMock.Object));
+            var ex = await Record.ExceptionAsync(() => _fileValidationService.ValidateImageAsync(_formFileMock.Object));
 
             Assert.NotNull(ex);
             Assert.IsType<CustomHttpException>(ex);
         }
 
         [Fact]
-        public void ValidateImage_FileSizeIsLargerThanExpected_ExceptionIsThrown()
+        public async Task ValidateImageAsync_FileSizeIsLargerThanExpected_ExceptionIsThrown()
         {
             _formFileMock.Setup(f => f.Length).Returns(2 * 1024 * 1024);
 
-            var ex = Record.Exception(() => _fileValidationService.ValidateImage(_formFileMock.Object));
+            var ex = await Record.ExceptionAsync(() => _fileValidationService.ValidateImageAsync(_formFileMock.Object));
 
             Assert.NotNull(ex);
             Assert.IsType<CustomHttpException>(ex);
         }
 
         [Fact]
-        public void ValidateImage_UploadedFileIsNotAnImage_CustomHttpExceptionIsThrown()
+        public async Task ValidateImageAsync_UploadedFileIsNotAnImage_CustomHttpExceptionIsThrown()
         {
             var mockFile = new Mock<IFormFile>();
             
@@ -119,7 +119,8 @@ namespace ImageResizer.Tests.Unit.Application.Services
             var stream = new MemoryStream(fileContent);
             mockFile.Setup(f => f.OpenReadStream()).Returns(stream);
 
-            var ex = Record.Exception(() => _fileValidationService.ValidateImage(mockFile.Object));
+            var ex = await Record.ExceptionAsync(() => _fileValidationService.ValidateImageAsync(mockFile.Object));
+
             Assert.IsType<CustomHttpException>(ex);
             Assert.Contains("Unsupported content.", ex.Message);
         }

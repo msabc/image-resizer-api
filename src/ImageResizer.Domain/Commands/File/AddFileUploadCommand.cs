@@ -1,4 +1,4 @@
-﻿namespace ImageResizer.Domain.Commands
+﻿namespace ImageResizer.Domain.Commands.File
 {
     public record AddFileUploadCommand
     {

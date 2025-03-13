@@ -1,5 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using ImageResizer.Application.Constants.Auth;
+﻿using ImageResizer.Application.Constants.Auth;
 using ImageResizer.Domain.Interfaces.Services;
 
 namespace ImageResizer.Api.Services

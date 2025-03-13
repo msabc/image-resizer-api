@@ -4,6 +4,6 @@ namespace ImageResizer.Application.Services.Validation
 {
     public interface IFileValidationService
     {
-        void ValidateImage(IFormFile file);
+        Task ValidateImageAsync(IFormFile file);
     }
 }

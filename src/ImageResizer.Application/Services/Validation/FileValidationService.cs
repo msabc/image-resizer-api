@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using ImageResizer.Configuration;
+﻿using ImageResizer.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -15,7 +14,7 @@ namespace ImageResizer.Application.Services.Validation
         /// <param name="file">The file that should be uploaded.</param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="CustomHttpException"></exception>
-        public void ValidateImage(IFormFile file)
+        public async Task ValidateImageAsync(IFormFile file)
         {
             ArgumentNullException.ThrowIfNull(file);
 
@@ -38,14 +37,7 @@ namespace ImageResizer.Application.Services.Validation
 
             try
             {
-                if (OperatingSystem.IsWindowsVersionAtLeast(6, 1))
-                {
-                    using var image = System.Drawing.Image.FromStream(file.OpenReadStream());
-                }
-                else
-                {
-                    logger.LogWarning("Content-based file validation bypassed due to running on an unsupported OS.");
-                }
+                await SixLabors.ImageSharp.Image.LoadAsync(file.OpenReadStream());
             }
             catch (Exception ex)
             {

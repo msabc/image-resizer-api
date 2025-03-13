@@ -11,6 +11,20 @@ namespace ImageResizer.Api.Controllers
     [Route("[controller]")]
     public class ImageController(IImageService imageService) : ImageResizerBaseController
     {
+        [HttpGet("filter")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FilterImagesReponse))]
+        public async Task<IActionResult> FilterAsync([FromBody] FilterImagesRequest request)
+        {
+            return Ok(await imageService.FilterAsync(CurrentUserService.UserId, request));
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetByIdResponse))]
+        public async Task<IActionResult> GetByIdAsync(Guid id)
+        {
+            return Ok(await imageService.GetByIdAsync(CurrentUserService.UserId, id));
+        }
+
         [HttpPost("upload")]
         [Consumes("multipart/form-data")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UploadImageResponse))]
