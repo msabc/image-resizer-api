@@ -1,5 +1,6 @@
 ﻿using ImageResizer.Configuration;
 using ImageResizer.Domain.Exceptions;
+using ImageResizer.Domain.Models.Tables;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -14,13 +15,15 @@ namespace ImageResizer.Application.Services.Validation
         /// <param name="file">The file that should be uploaded.</param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="CustomHttpException"></exception>
-        public async Task ValidateImageAsync(IFormFile file)
+        public void ValidateImageForUpload(IFormFile file)
         {
-            ArgumentNullException.ThrowIfNull(file);
+            if (file == null)
+                throw new ArgumentNullException(nameof(file));
 
             var fileExtension = Path.GetExtension(file.FileName);
 
-            ArgumentNullException.ThrowIfNullOrWhiteSpace(fileExtension);
+            if (string.IsNullOrWhiteSpace(fileExtension))
+                throw new CustomHttpException("Unable to determine the extension of the uploaded file.");
 
             if (string.IsNullOrWhiteSpace(file.ContentType) || !file.ContentType.StartsWith("image/"))
                 throw new CustomHttpException("Unsupported MIME type.", System.Net.HttpStatusCode.BadRequest);
@@ -34,15 +37,12 @@ namespace ImageResizer.Application.Services.Validation
 
             if (file.Length == 0 || file.Length > maxFileSize)
                 throw new CustomHttpException($"File size exceeds the limit of {imageSettings.MaxFileSizeInMB} MB.", System.Net.HttpStatusCode.BadRequest);
+        }
 
-            try
-            {
-                await SixLabors.ImageSharp.Image.LoadAsync(file.OpenReadStream());
-            }
-            catch (Exception ex)
-            {
-                throw new CustomHttpException("Unsupported content.", ex, System.Net.HttpStatusCode.BadRequest);
-            }
+        public void ValidateImageForResize(FileUpload fileUpload, int resizeHeight)
+        {
+            if (resizeHeight >= fileUpload.Height)
+                throw new CustomHttpException($"Unable to resize image. The provided height ({resizeHeight}) is greater than or equal to the original height {fileUpload.Height}.", System.Net.HttpStatusCode.BadRequest);
         }
     }
 }

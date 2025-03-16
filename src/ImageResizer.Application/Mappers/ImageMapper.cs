@@ -14,7 +14,8 @@ namespace ImageResizer.Application.Mappers
             {
                 Name = file.FileName,
                 CreatedByUserId = userId,
-                Uri = uri
+                Uri = uri,
+                CreatedDate = DateTime.UtcNow,
             };
         }
 

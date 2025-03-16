@@ -9,7 +9,7 @@ namespace ImageResizer.Infrastructure.Services
 {
     public class BlobService : IBlobService
     {
-        private readonly BlobContainerClient _blobContainerClient;
+        private readonly BlobContainerClient _imagesBlobContainerClient;
 
         public BlobService(IOptions<ResizerSettings> resizerOptions)
         {
@@ -19,17 +19,17 @@ namespace ImageResizer.Infrastructure.Services
             if (string.IsNullOrWhiteSpace(resizerOptions.Value.BlobSettings.ImagesContainerName))
                 throw new ArgumentException($"Missing configuration setting {nameof(BlobSettingsElement.ImagesContainerName)}.");
 
-            _blobContainerClient = new BlobContainerClient(
+            _imagesBlobContainerClient = new BlobContainerClient(
                 resizerOptions.Value.BlobSettings.ConnectionString, 
                 resizerOptions.Value.BlobSettings.ImagesContainerName
             );
 
-            _blobContainerClient.CreateIfNotExists(PublicAccessType.Blob);
+            _imagesBlobContainerClient.CreateIfNotExists(PublicAccessType.Blob);
         }
 
-        public async Task<string> UploadAsync(Stream fileStream, string fileName)
+        public async Task<string> UploadAsync(Stream fileStream, string blobName)
         {
-            var blobClient = _blobContainerClient.GetBlobClient(fileName);
+            var blobClient = _imagesBlobContainerClient.GetBlobClient(blobName);
 
             await blobClient.UploadAsync(fileStream, overwrite: true);
 
@@ -38,16 +38,25 @@ namespace ImageResizer.Infrastructure.Services
 
         public async Task<Stream> DownloadAsync(string fileName)
         {
-            var blobClient = _blobContainerClient.GetBlobClient(fileName);
+            var blobClient = _imagesBlobContainerClient.GetBlobClient(fileName);
 
-            var download = await blobClient.DownloadAsync();
+            var downloadInfo = await blobClient.DownloadAsync();
 
-            return download.Value.Content;
+            return downloadInfo.Value.Content;
         }
 
-        public async Task DeleteAsync(string fileName)
+        public async Task<Stream> DownloadAsync(Uri blobUri)
         {
-            var blobClient = _blobContainerClient.GetBlobClient(fileName);
+            var blobClient = new BlobClient(blobUri);
+
+            var downloadInfo = await blobClient.DownloadAsync();
+
+            return downloadInfo.Value.Content;
+        }
+
+        public async Task DeleteAsync(string blobName)
+        {
+            var blobClient = _imagesBlobContainerClient.GetBlobClient(blobName);
 
             await blobClient.DeleteIfExistsAsync();
         }

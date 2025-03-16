@@ -1,13 +1,15 @@
 ﻿using ImageResizer.Application.Mappers;
 using ImageResizer.Application.Models.Request.Image;
 using ImageResizer.Application.Models.Response.Image;
+using ImageResizer.Application.Services.ImageEncoding;
 using ImageResizer.Application.Services.Validation;
 using ImageResizer.Domain.Commands.File;
 using ImageResizer.Domain.Exceptions;
 using ImageResizer.Domain.Interfaces.Repositories;
 using ImageResizer.Domain.Interfaces.Services;
+using ImageResizer.Domain.Models.Tables;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
+using SixLabors.ImageSharp.Processing;
 
 namespace ImageResizer.Application.Services.Image
 {
@@ -15,37 +17,51 @@ namespace ImageResizer.Application.Services.Image
         IFileValidationService fileValidationService,
         IBlobService blobService,
         IFileUploadRepository fileUploadRepository,
-        ILogger<ImageService> logger) : IImageService
+        IImageEncodingService imageEncodingService) : IImageService
     {
         public async Task<UploadImageResponse> UploadAsync(Guid userId, IFormFile file)
         {
+            fileValidationService.ValidateImageForUpload(file);
+
+            int imageHeight = 0;
+            string uri = string.Empty;
+            Guid insertedId = Guid.Empty;
+
             try
             {
-                await fileValidationService.ValidateImageAsync(file);
+                var image = await SixLabors.ImageSharp.Image.LoadAsync(file.OpenReadStream());
 
-                string uri = string.Empty;
-
-                await fileUploadRepository.ExecuteInTransactionAsync(async () =>
-                {
-                    uri = await blobService.UploadAsync(file.OpenReadStream(), file.FileName);
-
-                    AddFileUploadCommand command = file.MapToCommand(userId, uri);
-                    command.CreatedDate = DateTime.UtcNow;
-
-                    await fileUploadRepository.AddAsync(command);
-                });
-
-                return new UploadImageResponse()
-                {
-                    Id = userId,
-                    Uri = uri
-                };
+                imageHeight = image.Height;
             }
             catch (Exception ex)
             {
-                logger.LogError($"An unexpected error occurred during image upload. {ex.Message}");
-                throw;
+                throw new CustomHttpException("Unsupported content.", ex, System.Net.HttpStatusCode.BadRequest);
             }
+
+            await fileUploadRepository.ExecuteInTransactionAsync(async () =>
+            {
+                uri = await blobService.UploadAsync(file.OpenReadStream(), Guid.NewGuid().ToString());
+
+                AddFileUploadCommand command = new()
+                {
+                    Name = file.FileName,
+                    CreatedByUserId = userId,
+                    Uri = uri,
+                    CreatedDate = DateTime.UtcNow,
+                    Height = imageHeight
+                };
+
+                insertedId = await fileUploadRepository.AddAsync(command);
+            });
+
+            if (string.IsNullOrWhiteSpace(uri) || insertedId == Guid.Empty)
+                throw new CustomHttpException("An unexpected error occurred.");
+
+            return new UploadImageResponse()
+            {
+                Id = insertedId,
+                Uri = uri
+            };
         }
 
         public async Task<FilterImagesReponse> FilterAsync(Guid userId, FilterImagesRequest request)
@@ -65,9 +81,47 @@ namespace ImageResizer.Application.Services.Image
             var fileUpload = await fileUploadRepository.GetByIdAsync(id);
 
             if (fileUpload == null)
-                throw new CustomHttpException($"Unable to find an image with id {id}", System.Net.HttpStatusCode.NotFound);
+                throw new CustomHttpException($"Unable to find an image with id {id}.", System.Net.HttpStatusCode.NotFound);
 
             return fileUpload.MapToResponse();
+        }
+
+        public async Task<ResizeResponse> ResizeAsync(Guid userId, ResizeRequest request)
+        {
+            FileUpload? fileUpload = await fileUploadRepository.GetByIdAsync(request.Id);
+
+            if (fileUpload == null)
+                throw new CustomHttpException($"Unable to find an image with id {request.Id}.", System.Net.HttpStatusCode.NotFound);
+
+            fileValidationService.ValidateImageForResize(fileUpload, request.Height);
+
+            Stream fileStream = await blobService.DownloadAsync(new Uri(fileUpload.Uri));
+
+            using var image = await SixLabors.ImageSharp.Image.LoadAsync(fileStream);
+
+            float aspectRatio = (float)image.Width / image.Height;
+            int newWidth = (int)(request.Height * aspectRatio);
+
+            image.Mutate(x => x.Resize(newWidth, request.Height));
+
+            string extension = Path.GetExtension(fileUpload.Name);
+
+            using var outputStream = new MemoryStream();
+            await image.SaveAsync(outputStream, imageEncodingService.GetImageEncoder(extension));
+            outputStream.Position = 0;
+
+            string uri = string.Empty;
+
+            await fileUploadRepository.ExecuteInTransactionAsync(async () =>
+            {
+                uri = await blobService.UploadAsync(outputStream, Guid.NewGuid().ToString());
+                await fileUploadRepository.UpdateAsync(fileUpload.Id, uri);
+            });
+
+            return new ResizeResponse()
+            {
+                Uri = uri
+            };
         }
 
         public async Task DeleteAsync(Guid userId, Guid id)
@@ -77,20 +131,15 @@ namespace ImageResizer.Application.Services.Image
             if (file == null)
                 throw new CustomHttpException($"Unable to find an image with id {id}", System.Net.HttpStatusCode.NotFound);
 
-            try
+            await fileUploadRepository.ExecuteInTransactionAsync(async () =>
             {
-                await fileUploadRepository.ExecuteInTransactionAsync(async () =>
-                {
-                    await fileUploadRepository.DeleteAsync(file.Id);
+                await blobService.DeleteAsync(file.Uri);
 
-                    await blobService.DeleteAsync(file.Name);
-                });
-            }
-            catch (Exception ex)
-            {
-                logger.LogError($"An unexpected error occurred during image upload. {ex.Message}");
-                throw;
-            }
+                if (!string.IsNullOrWhiteSpace(file.ResizedUri))
+                    await blobService.DeleteAsync(file.ResizedUri);
+
+                await fileUploadRepository.DeleteAsync(file.Id);
+            });
         }
     }
 }

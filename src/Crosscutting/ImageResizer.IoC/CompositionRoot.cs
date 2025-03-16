@@ -1,5 +1,6 @@
 ﻿using ImageResizer.Application.Services.AccessToken;
 using ImageResizer.Application.Services.Image;
+using ImageResizer.Application.Services.ImageEncoding;
 using ImageResizer.Application.Services.User;
 using ImageResizer.Application.Services.Validation;
 using ImageResizer.Configuration;
@@ -73,6 +74,7 @@ namespace ImageResizer.IoC
             services.AddScoped<IAccessTokenService, AccessTokenService>();
 
             services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<IImageEncodingService, ImageEncodingService>();
 
             // validation
             services.AddScoped<IFileValidationService, FileValidationService>();

@@ -5,11 +5,13 @@ namespace ImageResizer.Domain.Interfaces.Repositories
 {
     public interface IFileUploadRepository
     {
-        Task AddAsync(AddFileUploadCommand command);
+        Task<Guid> AddAsync(AddFileUploadCommand command);
         
         Task<List<FileUpload>> FilterAsync(FilterFileUploadCommand command);
 
         Task<FileUpload?> GetByIdAsync(Guid id);
+
+        Task UpdateAsync(Guid id, string resizedUri);
 
         Task DeleteAsync(Guid id);
 
