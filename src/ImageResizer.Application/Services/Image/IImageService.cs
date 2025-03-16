@@ -12,6 +12,8 @@ namespace ImageResizer.Application.Services.Image
 
         public Task<GetByIdResponse> GetByIdAsync(Guid userId, Guid id);
 
+        public Task<ResizeResponse> ResizeAsync(Guid userId, ResizeRequest request);
+
         public Task DeleteAsync(Guid userId, Guid id);
     }
 }

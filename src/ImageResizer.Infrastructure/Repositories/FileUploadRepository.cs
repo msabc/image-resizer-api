@@ -8,19 +8,22 @@ namespace ImageResizer.Infrastructure.Repositories
 {
     public class FileUploadRepository(IResizerDbContext resizerDbContext) : IFileUploadRepository
     {
-        public async Task AddAsync(AddFileUploadCommand command)
+        public async Task<Guid> AddAsync(AddFileUploadCommand command)
         {
             FileUpload fileUpload = new()
             {
                 Uri = command.Uri,
                 Name = command.Name,
                 CreatedDate = command.CreatedDate,
-                CreatedByUserId = command.CreatedByUserId
+                CreatedByUserId = command.CreatedByUserId,
+                Height = command.Height,
             };
 
             await resizerDbContext.FileUploads.AddAsync(fileUpload);
 
             await resizerDbContext.SaveChangesAsync();
+
+            return fileUpload.Id;
         }
 
         public async Task<List<FileUpload>> FilterAsync(FilterFileUploadCommand command)
@@ -44,7 +47,16 @@ namespace ImageResizer.Infrastructure.Repositories
 
         public async Task<FileUpload?> GetByIdAsync(Guid id)
         {
-            return await resizerDbContext.FileUploads.SingleOrDefaultAsync(x => x.Id == id);
+            return await resizerDbContext.FileUploads.SingleAsync(x => x.Id == id);
+        }
+
+        public async Task UpdateAsync(Guid id, string resizedUri)
+        {
+            var fileUpload = await resizerDbContext.FileUploads.SingleAsync(x => x.Id == id);
+
+            fileUpload.ResizedUri = resizedUri;
+
+            await resizerDbContext.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(Guid id)

@@ -34,6 +34,13 @@ namespace ImageResizer.Api.Controllers
             return Ok(await imageService.UploadAsync(CurrentUserService.UserId, request.File));
         }
 
+        [HttpPatch("resize")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResizeResponse))]
+        public async Task<IActionResult> ResizeAsync([FromBody] ResizeRequest request)
+        {
+            return Ok(await imageService.ResizeAsync(CurrentUserService.UserId, request));
+        }
+
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UploadImageResponse))]
         public async Task<IActionResult> DeleteAsync(Guid id)

@@ -9,5 +9,7 @@
         public required Guid CreatedByUserId { get; set; }
 
         public DateTime CreatedDate { get; set; }
+
+        public int Height { get; set; }
     }
 }

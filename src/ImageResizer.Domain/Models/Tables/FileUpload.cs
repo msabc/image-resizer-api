@@ -11,5 +11,9 @@
         public DateTime CreatedDate { get; set; }
 
         public Guid CreatedByUserId { get; set; }
+
+        public int Height { get; set; }
+
+        public string? ResizedUri { get; set; }
     }
 }
