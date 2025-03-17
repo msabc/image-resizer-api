@@ -6,6 +6,6 @@ var builder = FunctionsApplication.CreateBuilder(args);
 
 builder.ConfigureFunctionsWebApplication();
 
-builder.Services.RegisterFunctionDependencies(builder.Configuration, builder.Environment);
+builder.Services.RegisterFunctionDependencies(builder.Configuration);
 
 builder.Build().Run();

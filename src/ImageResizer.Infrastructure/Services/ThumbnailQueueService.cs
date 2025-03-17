@@ -22,7 +22,11 @@ namespace ImageResizer.Infrastructure.Services
 
             _queueClient = new QueueClient(
                 resizerOptions.Value.QueueSettings.ConnectionString,
-                resizerOptions.Value.QueueSettings.ThumbnailsQueueName
+                resizerOptions.Value.QueueSettings.ThumbnailsQueueName,
+                new QueueClientOptions()
+                {
+                    MessageEncoding = QueueMessageEncoding.Base64
+                }
             );
             
             _queueClient.CreateIfNotExists();

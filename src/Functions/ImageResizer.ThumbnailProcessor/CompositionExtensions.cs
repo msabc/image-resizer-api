@@ -11,16 +11,14 @@ using ImageResizer.Infrastructure.Transactions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace ImageResizer.ThumbnailProcessor
 {
     public static class CompositionExtensions
     {
         public static ResizerSettings RegisterFunctionDependencies(
-            this IServiceCollection services, 
-            IConfiguration configuration, 
-            IHostEnvironment hostEnvironment)
+            this IServiceCollection services,
+            ConfigurationManager configuration)
         {
             var settings = services.RegisterSettings(configuration);
 
@@ -31,14 +29,13 @@ namespace ImageResizer.ThumbnailProcessor
                     .RegisterApplicationServices()
                     .RegisterInfrastructureServices();
 
-            if (hostEnvironment.IsDevelopment())
-                configuration.AddUserSecrets<Program>();
-
             return settings;
         }
 
-        private static ResizerSettings RegisterSettings(this IServiceCollection services, IConfiguration configuration)
+        private static ResizerSettings RegisterSettings(this IServiceCollection services, ConfigurationManager configuration)
         {
+            configuration.AddUserSecrets<Program>();
+
             services.Configure<ResizerSettings>(options => configuration.GetSection(nameof(ResizerSettings)).Bind(options));
 
             var settings = new ResizerSettings();
