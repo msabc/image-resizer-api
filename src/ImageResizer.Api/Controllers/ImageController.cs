@@ -13,6 +13,7 @@ namespace ImageResizer.Api.Controllers
     {
         [HttpGet("filter")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FilterImagesReponse))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> FilterAsync([FromBody] FilterImagesRequest request)
         {
             return Ok(await imageService.FilterAsync(CurrentUserService.UserId, request));
@@ -21,6 +22,7 @@ namespace ImageResizer.Api.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetByIdResponse))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetByIdAsync(Guid id)
         {
             return Ok(await imageService.GetByIdAsync(CurrentUserService.UserId, id));
@@ -29,6 +31,8 @@ namespace ImageResizer.Api.Controllers
         [HttpPost("upload")]
         [Consumes("multipart/form-data")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UploadImageResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UploadAsync([FromForm] UploadFileRequest request)
         {
             return Ok(await imageService.UploadAsync(CurrentUserService.UserId, request.File));
@@ -36,6 +40,9 @@ namespace ImageResizer.Api.Controllers
 
         [HttpPatch("resize")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResizeResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> ResizeAsync([FromBody] ResizeRequest request)
         {
             return Ok(await imageService.ResizeAsync(CurrentUserService.UserId, request));
@@ -43,6 +50,8 @@ namespace ImageResizer.Api.Controllers
 
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UploadImageResponse))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteAsync(Guid id)
         {
             await imageService.DeleteAsync(CurrentUserService.UserId, id);

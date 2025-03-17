@@ -14,7 +14,5 @@ namespace ImageResizer.Domain.Interfaces.Repositories
         Task UpdateAsync(Guid id, string resizedUri);
 
         Task DeleteAsync(Guid id);
-
-        Task ExecuteInTransactionAsync(Func<Task> action);
     }
 }

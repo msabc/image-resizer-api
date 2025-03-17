@@ -13,6 +13,8 @@ namespace ImageResizer.Infrastructure.DatabaseContext
 
         public DbSet<FileUpload> FileUploads { get; set; }
 
+        public DbSet<Thumbnail> Thumbnails { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

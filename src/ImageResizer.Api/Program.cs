@@ -1,16 +1,19 @@
-using System.Text;
 using ImageResizer.Api.Filters;
 using ImageResizer.Api.OpenAPI;
 using ImageResizer.Api.Services;
 using ImageResizer.Domain.Interfaces.Services;
 using ImageResizer.Domain.Models.Tables;
 using ImageResizer.Infrastructure.DatabaseContext;
+using ImageResizer.Infrastructure.Services;
 using ImageResizer.IoC;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using Serilog;
+using System.Text;
+
+const string ApplicationName = "ImageResizer.Api";
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -18,6 +21,8 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
+    Log.Information($"{ApplicationName} starting.");
+
     var builder = WebApplication.CreateBuilder(args);
 
     builder.Services.AddControllers(options =>
@@ -123,10 +128,12 @@ try
     app.MapControllers();
 
     app.Run();
+
+    Log.Information($"{ApplicationName} started.");
 }
 catch (Exception ex)
 {
-    Log.Fatal($"Application terminated due to a fatal exception: {ex.Message}");
+    Log.Fatal($"{ApplicationName} terminated due to a fatal exception: {ex.Message}");
 }
 finally
 {

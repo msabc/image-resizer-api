@@ -70,22 +70,5 @@ namespace ImageResizer.Infrastructure.Repositories
                 await resizerDbContext.SaveChangesAsync();
             }
         }
-
-        public async Task ExecuteInTransactionAsync(Func<Task> action)
-        {
-            using var transaction = await resizerDbContext.Database.BeginTransactionAsync();
-
-            try
-            {
-                await action();
-
-                await transaction.CommitAsync();
-            }
-            catch
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
-        }
     }
 }

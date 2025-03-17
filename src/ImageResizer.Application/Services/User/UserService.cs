@@ -41,7 +41,7 @@ namespace ImageResizer.Application.Services.User
             var user = await userManager.FindByEmailAsync(request.Email);
 
             if (user is null)
-                throw new CustomHttpException("No user found with this e-mail.", System.Net.HttpStatusCode.BadRequest);
+                throw new CustomHttpException("No user found with this e-mail.", System.Net.HttpStatusCode.NotFound);
 
             bool signInSuccessful = await userManager.CheckPasswordAsync(user, request.Password);
 

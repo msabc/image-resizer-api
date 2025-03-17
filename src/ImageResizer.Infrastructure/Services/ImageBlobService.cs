@@ -7,11 +7,11 @@ using Microsoft.Extensions.Options;
 
 namespace ImageResizer.Infrastructure.Services
 {
-    public class BlobService : IBlobService
+    public class ImageBlobService : IImageBlobService
     {
         private readonly BlobContainerClient _imagesBlobContainerClient;
 
-        public BlobService(IOptions<ResizerSettings> resizerOptions)
+        public ImageBlobService(IOptions<ResizerSettings> resizerOptions)
         {
             if (string.IsNullOrWhiteSpace(resizerOptions.Value.BlobSettings.ConnectionString))
                 throw new ArgumentException($"Missing configuration setting: {nameof(BlobSettingsElement.ConnectionString)}.");
@@ -34,15 +34,6 @@ namespace ImageResizer.Infrastructure.Services
             await blobClient.UploadAsync(fileStream, overwrite: true);
 
             return blobClient.Uri.ToString();
-        }
-
-        public async Task<Stream> DownloadAsync(string fileName)
-        {
-            var blobClient = _imagesBlobContainerClient.GetBlobClient(fileName);
-
-            var downloadInfo = await blobClient.DownloadAsync();
-
-            return downloadInfo.Value.Content;
         }
 
         public async Task<Stream> DownloadAsync(Uri blobUri)

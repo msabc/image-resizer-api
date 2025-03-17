@@ -1,8 +1,4 @@
-﻿using ImageResizer.Application.Services.AccessToken;
-using ImageResizer.Application.Services.Image;
-using ImageResizer.Application.Services.Thumbnail;
-using ImageResizer.Application.Services.User;
-using ImageResizer.Application.Services.Validation;
+﻿using ImageResizer.Application.Services.Thumbnail;
 using ImageResizer.Configuration;
 using ImageResizer.Domain.Interfaces.DatabaseContext;
 using ImageResizer.Domain.Interfaces.Repositories;
@@ -15,12 +11,16 @@ using ImageResizer.Infrastructure.Transactions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
-namespace ImageResizer.IoC
+namespace ImageResizer.ThumbnailProcessor
 {
-    public static class CompositionRoot
+    public static class CompositionExtensions
     {
-        public static ResizerSettings RegisterApplicationDependencies(this IServiceCollection services, IConfiguration configuration)
+        public static ResizerSettings RegisterFunctionDependencies(
+            this IServiceCollection services, 
+            IConfiguration configuration, 
+            IHostEnvironment hostEnvironment)
         {
             var settings = services.RegisterSettings(configuration);
 
@@ -30,6 +30,9 @@ namespace ImageResizer.IoC
                     .RegisterRepositories()
                     .RegisterApplicationServices()
                     .RegisterInfrastructureServices();
+
+            if (hostEnvironment.IsDevelopment())
+                configuration.AddUserSecrets<Program>();
 
             return settings;
         }
@@ -73,7 +76,6 @@ namespace ImageResizer.IoC
 
         private static IServiceCollection RegisterRepositories(this IServiceCollection services)
         {
-            services.AddScoped<IFileUploadRepository, FileUploadRepository>();
             services.AddScoped<IThumbnailRepository, ThumbnailRepository>();
 
             return services;
@@ -81,21 +83,13 @@ namespace ImageResizer.IoC
 
         private static IServiceCollection RegisterApplicationServices(this IServiceCollection services)
         {
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IAccessTokenService, AccessTokenService>();
-
-            services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IThumbnailService, ThumbnailService>();
-
-            // validation
-            services.AddScoped<IFileValidationService, FileValidationService>();
 
             return services;
         }
 
         private static IServiceCollection RegisterInfrastructureServices(this IServiceCollection services)
         {
-            services.AddScoped<IImageBlobService, ImageBlobService>();
             services.AddScoped<IThumbnailBlobService, ThumbnailBlobService>();
             services.AddScoped<IImageProcessorService, ImageProcessorService>();
             services.AddScoped<IThumbnailQueueService, ThumbnailQueueService>();

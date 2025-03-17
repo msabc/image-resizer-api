@@ -1,10 +1,8 @@
 ﻿namespace ImageResizer.Domain.Interfaces.Services
 {
-    public interface IBlobService
+    public interface IImageBlobService
     {
         public Task<string> UploadAsync(Stream fileStream, string blobName);
-
-        public Task<Stream> DownloadAsync(string blobName);
 
         public Task<Stream> DownloadAsync(Uri blobUri);
 

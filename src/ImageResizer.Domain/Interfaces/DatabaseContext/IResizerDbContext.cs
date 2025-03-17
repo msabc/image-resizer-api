@@ -10,6 +10,8 @@ namespace ImageResizer.Domain.Interfaces.DatabaseContext
 
         DbSet<FileUpload> FileUploads { get; set; }
 
+        DbSet<Thumbnail> Thumbnails { get; set; }
+
         DatabaseFacade Database { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken());
