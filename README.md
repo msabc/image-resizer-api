@@ -28,7 +28,7 @@ The project features the following technologies:
 
 - .NET 9 Web API
 - EFCore 9 - Code first approach - for database access
-- SQL Server
+- PostgreSQL
 - Scalar - for Open API UI
 - Serilog - for logging
   - configure logging to your liking by modifying the **appsettings.json** file using the instructions provided in [**Serilog.Settings.Configuration**](https://github.com/serilog/serilog-settings-configuration) repository.
@@ -48,9 +48,13 @@ The project features the following technologies:
     - Right-click on the **ImageResizer.Api** project and click 'Manage User Secrets'
     - a secrets.json file will be created
     - populate the file with the following values:
+
  ```javascript
 {
   "ResizerSettings": {
+    "DatabaseSettings": {
+      "ConnectionString": "https://[YOUR_CONNECTION_STRING]"
+      },
     "JWTSettings": {
       "Issuer": "https://[YOUR_ISSUER]",
       "Audience": "https://[YOUR_AUDIENCE]",
@@ -59,6 +63,9 @@ The project features the following technologies:
   }
 }
 ```
+
+**Note:**
+Whatever value you choose for the **ConnectionString**, a new database will be created by the application automatically (if it doesn't already exist).
 
 Replace the values in brackets with your own values. 
 You can generate a random 128 bit key [**here**](https://generate-random.org/encryption-key-generator?count=1&bytes=16&cipher=aes-256-cbc).
