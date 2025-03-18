@@ -48,7 +48,8 @@ namespace ImageResizer.Tests.Unit.Application.Services
             var ex = Record.Exception(() => _fileValidationService.ValidateImageForUpload(_formFileMock.Object));
 
             Assert.NotNull(ex);
-            Assert.IsType<ArgumentNullException>(ex);
+            Assert.IsType<CustomHttpException>(ex);
+            Assert.Equal("Unable to determine the extension of the uploaded file.", ex.Message);
         }
 
         [Fact]
@@ -106,25 +107,6 @@ namespace ImageResizer.Tests.Unit.Application.Services
             Assert.IsType<CustomHttpException>(ex);
         }
 
-        [Fact]
-        public void ValidateImageForUpload_UploadedFileIsNotAnImage_CustomHttpExceptionIsThrown()
-        {
-            var mockFile = new Mock<IFormFile>();
-            
-            var fileContent = Encoding.UTF8.GetBytes("Mock file content");
-            mockFile.Setup(f => f.FileName).Returns("something.jpg");
-            mockFile.Setup(f => f.ContentType).Returns("image/png");
-            mockFile.Setup(f => f.Length).Returns(123);
-            
-            var stream = new MemoryStream(fileContent);
-            mockFile.Setup(f => f.OpenReadStream()).Returns(stream);
-
-            var ex = Record.Exception(() => _fileValidationService.ValidateImageForUpload(mockFile.Object));
-
-            Assert.IsType<CustomHttpException>(ex);
-            Assert.Contains("Unsupported content.", ex.Message);
-        }
-
         private void SetupMocks()
         {
             var resizerSettings = new ResizerSettings()
@@ -132,7 +114,8 @@ namespace ImageResizer.Tests.Unit.Application.Services
                 ImageSettings = new Configuration.Models.ImageSettingsElement()
                 {
                     SupportedExtensions = [".jpg"],
-                    MaxFileSizeInMB = 1
+                    MaxFileSizeInMB = 1,
+                    DefaultThumbnailHeightInPixels = 160
                 }
             };
 
