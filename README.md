@@ -1,5 +1,7 @@
 <h1 align="center">Image Resizer</h1>
 
+This project is created for learning purposes only.
+
 **Image Resizer** is a **.NET 9 Web API** that enables users to upload images and resize them. 
 The solution also contains a **ThumbnailProcessor** Azure Function which automatically creates a thumbnail based on each
 uploaded image while keeping the original aspect ratio.
@@ -37,6 +39,7 @@ The project features the following technologies:
 - EFCore 9 - Code first approach - for database access
 - PostgreSQL - for data storage
 - Scalar - for Open API UI
+- ImageSharp - for image processing
 - Serilog - for logging
   - configure logging to your liking by modifying the **appsettings.json** file using the instructions provided in [**Serilog.Settings.Configuration**](https://github.com/serilog/serilog-settings-configuration) repository.
 - Moq
@@ -59,10 +62,12 @@ The project features the following technologies:
 
  ```javascript
 {
+  "ConnectionStrings": {
+		"ResizerDatabaseConnectionString": "[YOUR_POSTGRESQL_CONNECTION_STRING]",
+		"BlobStorageConnectionString": "UseDevelopmentStorage=true",
+		"QueueStorageConnectionString": "UseDevelopmentStorage=true"
+	},
   "ResizerSettings": {
-    "DatabaseSettings": {
-      "ConnectionString": "Server=localhost;Port=5432;Database=Resizer;User Id=[YOUR_POSTGRES_USER];Password=[YOUR_POSTGRES_PASSWORD];"
-      },
     "JWTSettings": {
       "Issuer": "https://[YOUR_ISSUER]",
       "Audience": "https://[YOUR_AUDIENCE]",
@@ -73,9 +78,9 @@ The project features the following technologies:
 ```
 
 **Note:**
-Whatever value you choose for the **ConnectionString**, a new database will be created by the application automatically (if it doesn't already exist).
+> Replace the values in brackets with your own values. 
+>> Whatever value you choose for the **ConnectionString**, a new database will be created by the application automatically (if it doesn't already exist).
 
-Replace the values in brackets with your own values. 
 You can generate a random 128 bit key [**here**](https://generate-random.org/encryption-key-generator?count=1&bytes=16&cipher=aes-256-cbc).
 
 5. Run the project
@@ -90,10 +95,9 @@ You can generate a random 128 bit key [**here**](https://generate-random.org/enc
 
  ```javascript
 {
-    "ResizerSettings": {
-        "DatabaseSettings": {
-            "ConnectionString": "Server=localhost;Port=5432;Database=Resizer;User Id=[YOUR_POSTGRES_USER];Password=[YOUR_POSTGRES_PASSWORD];"
-        }
+    "ConnectionStrings": {
+        "ResizerDatabaseConnectionString": "[YOUR_POSTGRESQL_CONNECTION_STRING]",
+        "BlobStorageConnectionString": "UseDevelopmentStorage=true"
     }
 }
 ```

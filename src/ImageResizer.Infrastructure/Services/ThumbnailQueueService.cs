@@ -12,16 +12,16 @@ namespace ImageResizer.Infrastructure.Services
     {
         private readonly QueueClient _queueClient;
 
-        public ThumbnailQueueService(IOptions<ResizerSettings> resizerOptions)
+        public ThumbnailQueueService(IOptions<ConnectionStrings> connectionStringsOptions, IOptions<ResizerSettings> resizerOptions)
         {
-            if (string.IsNullOrWhiteSpace(resizerOptions.Value.QueueSettings.ConnectionString))
-                throw new ArgumentException($"Missing configuration setting: {nameof(QueueSettingsElement.ConnectionString)}.");
+            if (string.IsNullOrWhiteSpace(connectionStringsOptions.Value.QueueStorageConnectionString))
+                throw new ArgumentException($"Missing configuration setting: {nameof(ConnectionStrings.QueueStorageConnectionString)}.");
 
             if (string.IsNullOrWhiteSpace(resizerOptions.Value.QueueSettings.ThumbnailsQueueName))
                 throw new ArgumentException($"Missing configuration setting {nameof(QueueSettingsElement.ThumbnailsQueueName)}.");
 
             _queueClient = new QueueClient(
-                resizerOptions.Value.QueueSettings.ConnectionString,
+                connectionStringsOptions.Value.QueueStorageConnectionString,
                 resizerOptions.Value.QueueSettings.ThumbnailsQueueName,
                 new QueueClientOptions()
                 {

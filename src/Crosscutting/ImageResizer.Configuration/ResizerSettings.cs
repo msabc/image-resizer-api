@@ -10,8 +10,6 @@ namespace ImageResizer.Configuration
 
         public QueueSettingsElement QueueSettings { get; set; }
 
-        public DatabaseSettingsElement DatabaseSettings { get; set; }
-
         public ImageSettingsElement ImageSettings { get; set; }
     }
 }

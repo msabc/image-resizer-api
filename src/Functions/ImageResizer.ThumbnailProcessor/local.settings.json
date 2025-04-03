@@ -3,7 +3,6 @@
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
-    "ResizerSettings:BlobSettings:ConnectionString": "UseDevelopmentStorage=true",
     "ResizerSettings:BlobSettings:ThumbnailsContainerName": "thumbnails"
   }
 }

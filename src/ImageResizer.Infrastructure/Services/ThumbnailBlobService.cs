@@ -11,16 +11,18 @@ namespace ImageResizer.Infrastructure.Services
     {
         private readonly BlobContainerClient _thumbnailsBlobContainerClient;
 
-        public ThumbnailBlobService(IOptions<ResizerSettings> resizerOptions)
+        public ThumbnailBlobService(
+            IOptions<ConnectionStrings> connectionStringsOptions, 
+            IOptions<ResizerSettings> resizerOptions)
         {
-            if (string.IsNullOrWhiteSpace(resizerOptions.Value.BlobSettings.ConnectionString))
-                throw new ArgumentException($"Missing configuration setting: {nameof(BlobSettingsElement.ConnectionString)}.");
+            if (string.IsNullOrWhiteSpace(connectionStringsOptions.Value.BlobStorageConnectionString))
+                throw new ArgumentException($"Missing configuration setting: {nameof(ConnectionStrings.BlobStorageConnectionString)}.");
 
             if (string.IsNullOrWhiteSpace(resizerOptions.Value.BlobSettings.ThumbnailsContainerName))
                 throw new ArgumentException($"Missing configuration setting {nameof(BlobSettingsElement.ThumbnailsContainerName)}.");
 
             _thumbnailsBlobContainerClient = new BlobContainerClient(
-                resizerOptions.Value.BlobSettings.ConnectionString, 
+                connectionStringsOptions.Value.BlobStorageConnectionString, 
                 resizerOptions.Value.BlobSettings.ThumbnailsContainerName
             );
 
