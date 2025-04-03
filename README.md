@@ -1,6 +1,8 @@
 <h1 align="center">Image Resizer</h1>
 
 **Image Resizer** is a **.NET 9 Web API** that enables users to upload images and resize them. 
+The solution also contains a **ThumbnailProcessor** Azure Function which automatically creates a thumbnail based on each
+uploaded image while keeping the original aspect ratio.
 
 ## Architecture
 
@@ -30,13 +32,16 @@ and is divided into several projects (layers):
 The project features the following technologies:
 
 - .NET 9 Web API
+- Azure Queue Storage - for thumbnail processing
+- Azure Blob Storage - for image storage
 - EFCore 9 - Code first approach - for database access
-- PostgreSQL
+- PostgreSQL - for data storage
 - Scalar - for Open API UI
 - Serilog - for logging
   - configure logging to your liking by modifying the **appsettings.json** file using the instructions provided in [**Serilog.Settings.Configuration**](https://github.com/serilog/serilog-settings-configuration) repository.
 - Moq
 - xUnit
+- Github Actions - for CI/CD
 
 ## Authorization and authentication
 - ImageResizer uses ASP.NET Core Identity as the authentication provider
@@ -77,8 +82,6 @@ You can generate a random 128 bit key [**here**](https://generate-random.org/enc
 
 ## Run the Azure Function locally
 
-The setup is similar to the API, except the setup of user secrets is a bit different.
-
 1. Set **ImageResizer.ThumbnailProcessor** as the Startup project
 2. Configure **user secrets** necessary for local development: 
     - Right-click on the **ImageResizer.ThumbnailProcessor** project and click 'Manage User Secrets'
@@ -87,9 +90,22 @@ The setup is similar to the API, except the setup of user secrets is a bit diffe
 
  ```javascript
 {
-    "ResizerSettings:DatabaseSettings:ConnectionString": "Server=localhost;Port=5432;Database=Resizer;User Id=[YOUR_POSTGRES_USER];Password=[YOUR_POSTGRES_PASSWORD];"
+    "ResizerSettings": {
+        "DatabaseSettings": {
+            "ConnectionString": "Server=localhost;Port=5432;Database=Resizer;User Id=[YOUR_POSTGRES_USER];Password=[YOUR_POSTGRES_PASSWORD];"
+        }
+    }
 }
 ```
-**Note:**
-1. Make sure you add the secrets using colon (:) or double-underscore (__) [notation](https://learn.microsoft.com/en-us/azure/azure-functions/functions-app-settings#app-setting-considerations) or a  otherwise they won't be resolved.
-2. The connection string can be different than the one used in the API, but then your thumbnails will be stored elsewhere.
+
+## CI/CD
+
+This repository uses Github Actions for CI/CD.
+
+Currently there are two workflows defined in the  **.github/workflows** folder:
+
+1. *build-and-test* 
+    - doesn't deploy the application and is triggered **automatically**
+2. *deploy* 
+    - deploys the application and is triggered **manually**
+    - requires resource provisioning

@@ -1,4 +1,4 @@
-name: Build and Test .NET Solution
+name: Build and Test - image-resizer
 
 on:
   push:
@@ -32,4 +32,4 @@ jobs:
       run: dotnet build --configuration Release --no-restore
 
     - name: Run tests
-      run: dotnet test ./test/ImageResizer.Tests.Unit/ImageResizer.Tests.Unit.csproj --configuration Release --no-build --logger "trx;LogFileName=TestResults.trx"
+      run: dotnet test ./test/ImageResizer.Tests.Unit/ImageResizer.Tests.Unit.csproj --configuration Release --no-build

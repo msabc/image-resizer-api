@@ -1,5 +1,4 @@
-﻿using System.Text;
-using ImageResizer.Application.Services.Validation;
+﻿using ImageResizer.Application.Services.Validation;
 using ImageResizer.Configuration;
 using ImageResizer.Domain.Exceptions;
 using Microsoft.AspNetCore.Http;

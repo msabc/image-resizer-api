@@ -1,17 +1,16 @@
+using System.Text;
 using ImageResizer.Api.Filters;
 using ImageResizer.Api.OpenAPI;
 using ImageResizer.Api.Services;
 using ImageResizer.Domain.Interfaces.Services;
 using ImageResizer.Domain.Models.Tables;
 using ImageResizer.Infrastructure.DatabaseContext;
-using ImageResizer.Infrastructure.Services;
 using ImageResizer.IoC;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using Serilog;
-using System.Text;
 
 const string ApplicationName = "ImageResizer.Api";
 
@@ -94,7 +93,7 @@ try
 
     builder.Logging.ClearProviders();
 
-    builder.Services.AddSerilog((services, loggingConfiguration) => 
+    builder.Services.AddSerilog((services, loggingConfiguration) =>
     {
         loggingConfiguration.ReadFrom.Configuration(builder.Configuration)
                             .Enrich.FromLogContext();
@@ -110,14 +109,11 @@ try
 
     app.UseSerilogRequestLogging();
 
-    if (app.Environment.IsDevelopment())
+    app.MapOpenApi();
+    app.MapScalarApiReference(options =>
     {
-        app.MapOpenApi();
-        app.MapScalarApiReference(options =>
-        {
-            options.Theme = ScalarTheme.DeepSpace;
-        });
-    }
+        options.Theme = ScalarTheme.DeepSpace;
+    });
 
     app.UseHttpsRedirection();
 
@@ -133,7 +129,7 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal($"{ApplicationName} terminated due to a fatal exception: {ex.Message}");
+    Log.Fatal($"{ApplicationName} terminated due to a fatal exception: {ex.Message}{Environment.NewLine}{ex.StackTrace}");
 }
 finally
 {
