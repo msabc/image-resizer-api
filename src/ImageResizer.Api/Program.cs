@@ -1,4 +1,5 @@
 using System.Text;
+using ImageResizer.Api.Constants;
 using ImageResizer.Api.Filters;
 using ImageResizer.Api.OpenAPI;
 using ImageResizer.Api.Services;
@@ -112,6 +113,13 @@ try
     app.MapOpenApi();
     app.MapScalarApiReference(options =>
     {
+        options
+            .WithPreferredScheme(Authentication.BearerAuthenticationSchemeName)
+            .WithHttpBearerAuthentication(bearer =>
+            {
+                bearer.Token = "your-bearer-token";
+            });
+
         options.Theme = ScalarTheme.DeepSpace;
     });
 
