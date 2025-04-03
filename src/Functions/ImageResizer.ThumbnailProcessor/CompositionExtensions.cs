@@ -22,7 +22,9 @@ namespace ImageResizer.ThumbnailProcessor
         {
             var settings = services.RegisterSettings(configuration);
 
-            services.RegisterDatabaseConfiguration(settings)
+            var dbSettings = services.RegisterDatabaseSettings(configuration);
+
+            services.RegisterDatabaseConfiguration(dbSettings)
                     .RegisterDbContext()
                     .RegisterDatabaseServices()
                     .RegisterRepositories()
@@ -44,14 +46,21 @@ namespace ImageResizer.ThumbnailProcessor
             return settings;
         }
 
-        private static IServiceCollection RegisterDatabaseConfiguration(this IServiceCollection services, ResizerSettings settings)
+        private static ConnectionStrings RegisterDatabaseSettings(this IServiceCollection services, IConfiguration configuration)
         {
-            if (string.IsNullOrEmpty(settings.DatabaseSettings.ConnectionString))
-                throw new ArgumentNullException(nameof(settings));
+            services.Configure<ConnectionStrings>(options => configuration.GetSection(nameof(ConnectionStrings)).Bind(options));
 
+            var dbSettings = new ConnectionStrings();
+            configuration.GetSection(nameof(ConnectionStrings)).Bind(dbSettings);
+
+            return dbSettings;
+        }
+
+        private static IServiceCollection RegisterDatabaseConfiguration(this IServiceCollection services, ConnectionStrings connectionStrings)
+        {
             services.AddDbContext<ResizerDbContext>(options =>
             {
-                options.UseNpgsql(settings.DatabaseSettings.ConnectionString);
+                options.UseNpgsql(connectionStrings.ResizerDatabaseConnectionString);
             });
 
             return services;
