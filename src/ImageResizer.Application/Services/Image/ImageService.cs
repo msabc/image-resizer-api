@@ -1,5 +1,4 @@
-﻿using System.Text.Encodings.Web;
-using ImageResizer.Application.Mappers;
+﻿using ImageResizer.Application.Mappers;
 using ImageResizer.Application.Models.Request.Image;
 using ImageResizer.Application.Models.Response.Image;
 using ImageResizer.Application.Services.Validation;
@@ -9,6 +8,7 @@ using ImageResizer.Domain.Exceptions;
 using ImageResizer.Domain.Interfaces.Repositories;
 using ImageResizer.Domain.Interfaces.Services;
 using ImageResizer.Domain.Interfaces.Transactions;
+using ImageResizer.Domain.Models.Enums;
 using ImageResizer.Domain.Models.Queues;
 using ImageResizer.Domain.Models.Tables;
 using Microsoft.AspNetCore.Http;
@@ -22,6 +22,7 @@ namespace ImageResizer.Application.Services.Image
         IFileUploadRepository fileUploadRepository,
         IImageProcessorService imageProcessorService,
         IResizerTransactionExecutor transactionExecutor,
+        IFeatureFlagService featureFlagService,
         IThumbnailQueueService thumbnailQueueService,
         IOptions<ResizerSettings> resizerOptions) : IImageService
     {
@@ -66,13 +67,16 @@ namespace ImageResizer.Application.Services.Image
             if (string.IsNullOrWhiteSpace(uri) || insertedId == Guid.Empty)
                 throw new CustomHttpException("An unexpected error occurred.");
 
-            await thumbnailQueueService.AddMessageAsync(new ThumbnailProcessorMessage()
+            if (featureFlagService.IsFeatureEnabled(Features.AutomaticThumbnailCreationEnabled))
             {
-                FileUploadId = insertedId,
-                FileName = file.FileName,
-                BlobUri = uri,
-                Height = resizerOptions.Value.ImageSettings.DefaultThumbnailHeightInPixels
-            });
+                await thumbnailQueueService.AddMessageAsync(new ThumbnailProcessorMessage()
+                {
+                    FileUploadId = insertedId,
+                    FileName = file.FileName,
+                    BlobUri = uri,
+                    Height = resizerOptions.Value.ImageSettings.DefaultThumbnailHeightInPixels
+                });
+            }
 
             return new UploadImageResponse()
             {
@@ -161,7 +165,7 @@ namespace ImageResizer.Application.Services.Image
 
             if (fileUpload.CreatedByUserId != userId)
                 throw new CustomHttpException($"You do not have the permission to view this image.", System.Net.HttpStatusCode.Forbidden);
-            
+
             return new GenerateSasUrlResponse()
             {
                 Url = $"{fileUpload.Uri}?{imageBlobService.GenerateSasToken(fileUpload.Uri, fileUpload.Name)}"

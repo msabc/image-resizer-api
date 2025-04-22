@@ -108,6 +108,7 @@ namespace ImageResizer.IoC
             services.AddScoped<IThumbnailBlobService, ThumbnailBlobService>();
             services.AddScoped<IImageProcessorService, ImageProcessorService>();
             services.AddScoped<IThumbnailQueueService, ThumbnailQueueService>();
+            services.AddScoped<IFeatureFlagService, FeatureFlagService>();
 
             return services;
         }

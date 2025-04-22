@@ -11,5 +11,7 @@ namespace ImageResizer.Configuration
         public QueueSettingsElement QueueSettings { get; set; }
 
         public ImageSettingsElement ImageSettings { get; set; }
+
+        public FeatureSettingsElement FeatureSettings { get; set; }
     }
 }
