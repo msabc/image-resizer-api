@@ -4,6 +4,8 @@
     {
         public required string ImagesContainerName { get; set; }
 
+        public required string ImagesContainerAccountKey { get; set; }
+
         public required string ThumbnailsContainerName { get; set; }
     }
 }

@@ -7,5 +7,7 @@
         public Task<Stream> DownloadAsync(Uri blobUri);
 
         public Task DeleteAsync(string blobName);
+
+        public string GenerateSasToken(string blobName, string originalFileName);
     }
 }

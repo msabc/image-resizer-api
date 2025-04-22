@@ -1,4 +1,5 @@
-﻿using ImageResizer.Application.Mappers;
+﻿using System.Text.Encodings.Web;
+using ImageResizer.Application.Mappers;
 using ImageResizer.Application.Models.Request.Image;
 using ImageResizer.Application.Models.Response.Image;
 using ImageResizer.Application.Services.Validation;
@@ -17,7 +18,7 @@ namespace ImageResizer.Application.Services.Image
 {
     public class ImageService(
         IFileValidationService fileValidationService,
-        IImageBlobService blobService,
+        IImageBlobService imageBlobService,
         IFileUploadRepository fileUploadRepository,
         IImageProcessorService imageProcessorService,
         IResizerTransactionExecutor transactionExecutor,
@@ -48,7 +49,7 @@ namespace ImageResizer.Application.Services.Image
 
             await transactionExecutor.ExecuteInTransactionAsync(async () =>
             {
-                uri = await blobService.UploadAsync(file.OpenReadStream(), Guid.NewGuid().ToString());
+                uri = await imageBlobService.UploadAsync(file.OpenReadStream(), GetBlobUploadName(userId));
 
                 AddFileUploadCommand command = new()
                 {
@@ -111,10 +112,11 @@ namespace ImageResizer.Application.Services.Image
 
             fileValidationService.ValidateImageForResize(fileUpload, request.Height);
 
-            Stream fileStream = await blobService.DownloadAsync(new Uri(fileUpload.Uri));
+            Stream fileStream = await imageBlobService.DownloadAsync(new Uri(fileUpload.Uri));
+
             string extension = Path.GetExtension(fileUpload.Name);
 
-            MemoryStream memoryStream = new();
+            using MemoryStream memoryStream = new();
             await imageProcessorService.ResizeAsync(fileStream, memoryStream, extension, request.Height);
             memoryStream.Position = 0;
 
@@ -122,7 +124,7 @@ namespace ImageResizer.Application.Services.Image
 
             await transactionExecutor.ExecuteInTransactionAsync(async () =>
             {
-                uri = await blobService.UploadAsync(memoryStream, Guid.NewGuid().ToString());
+                uri = await imageBlobService.UploadAsync(memoryStream, GetBlobUploadName(userId));
                 await fileUploadRepository.UpdateAsync(fileUpload.Id, uri);
             });
 
@@ -137,17 +139,35 @@ namespace ImageResizer.Application.Services.Image
             var file = await fileUploadRepository.GetByIdAsync(id);
 
             if (file == null)
-                throw new CustomHttpException($"Unable to find an image with id {id}", System.Net.HttpStatusCode.NotFound);
+                throw new CustomHttpException($"Unable to find an image with id {id}.", System.Net.HttpStatusCode.NotFound);
 
             await transactionExecutor.ExecuteInTransactionAsync(async () =>
             {
-                await blobService.DeleteAsync(file.Uri);
+                await imageBlobService.DeleteAsync(file.Uri);
 
                 if (!string.IsNullOrWhiteSpace(file.ResizedUri))
-                    await blobService.DeleteAsync(file.ResizedUri);
+                    await imageBlobService.DeleteAsync(file.ResizedUri);
 
                 await fileUploadRepository.DeleteAsync(file.Id);
             });
         }
+
+        public async Task<GenerateSasUrlResponse> GenerateSasUrlAsync(Guid userId, Guid id)
+        {
+            var fileUpload = await fileUploadRepository.GetByIdAsync(id);
+
+            if (fileUpload == null)
+                throw new CustomHttpException($"No image with id {id} exists.", System.Net.HttpStatusCode.NotFound);
+
+            if (fileUpload.CreatedByUserId != userId)
+                throw new CustomHttpException($"You do not have the permission to view this image.", System.Net.HttpStatusCode.Forbidden);
+            
+            return new GenerateSasUrlResponse()
+            {
+                Url = $"{fileUpload.Uri}?{imageBlobService.GenerateSasToken(fileUpload.Uri, fileUpload.Name)}"
+            };
+        }
+
+        private static string GetBlobUploadName(Guid userId) => $"{userId}/{Guid.NewGuid()}";
     }
 }

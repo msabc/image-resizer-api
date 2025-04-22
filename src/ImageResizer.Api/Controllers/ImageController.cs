@@ -58,5 +58,14 @@ namespace ImageResizer.Api.Controllers
 
             return Ok();
         }
+
+        [HttpGet("generate-sas-url")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GenerateSasUrlResponse))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GenerateSasUrlAsync([FromQuery] Guid id)
+        {
+            return Ok(await imageService.GenerateSasUrlAsync(CurrentUserService.UserId, id));
+        }
     }
 }
