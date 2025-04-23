@@ -8,12 +8,12 @@ namespace ImageResizer.Domain.Exceptions
 
         public CustomHttpException(string message, HttpStatusCode? statusCode = default) : base(message)
         {
-            StatusCode = statusCode ?? HttpStatusCode.InternalServerError;
+            StatusCode ??= statusCode;
         }
 
         public CustomHttpException(string message, Exception innerException, HttpStatusCode? statusCode = default) : base(message, innerException)
         {
-            StatusCode = statusCode ?? HttpStatusCode.InternalServerError;
+            StatusCode ??= statusCode;
         }
     }
 }

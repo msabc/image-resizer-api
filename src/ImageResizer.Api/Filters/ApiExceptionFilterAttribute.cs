@@ -2,7 +2,6 @@
 using ImageResizer.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Solarnelle.Domain.Exceptions;
 
 namespace ImageResizer.Api.Filters
 {
@@ -10,11 +9,11 @@ namespace ImageResizer.Api.Filters
     {
         public override void OnException(ExceptionContext context)
         {
-            logger.LogError($"An unexpected error has occurred: {context.Exception.Message}");
+            logger.LogError($"An unexpected error has occurred. {context.Exception.Message}");
 
             if (context.Exception is CustomHttpException customHttpException)
             {
-                context.HttpContext.Response.StatusCode = (int)customHttpException.StatusCode!.Value;
+                context.HttpContext.Response.StatusCode = (int)(customHttpException.StatusCode ?? HttpStatusCode.InternalServerError);
 
                 var errorObject = new
                 {
@@ -23,13 +22,13 @@ namespace ImageResizer.Api.Filters
 
                 context.Result = new ObjectResult(errorObject);
             }
-            else if (context.Exception is DatabaseException databaseException)
+            else
             {
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
                 var errorObject = new
                 {
-                    databaseException.Message
+                    Message = "An unexpected error occurred. Please try again later."
                 };
 
                 context.Result = new ObjectResult(errorObject);
